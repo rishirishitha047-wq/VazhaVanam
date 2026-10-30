@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VazhaVanam — Climate Advisor</title>
+<style>
+  :root {
+    --green: #2e7d32;
+    --green-light: #e8f5e9;
+    --amber: #f57f17;
+    --amber-light: #fff8e1;
+    --red: #c62828;
+    --red-light: #ffebee;
+    --blue: #1565c0;
+    --blue-light: #e3f2fd;
+    --grey: #546e7a;
+    --text: #1a2027;
+    --border: #dde3ea;
+    --radius: 12px;
+    --shadow: 0 2px 12px rgba(0,0,0,.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f0f4f8;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--green);
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  }
+  header .logo { font-size: 2rem; }
+  header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: .3px; }
+  header p  { font-size: .82rem; opacity: .88; margin-top: 2px; }
+  .lang-toggle {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+  }
+  .lang-toggle button {
+    padding: 6px 16px;
+    border: 2px solid rgba(255,255,255,.5);
+    background: transparent;
+    color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: .85rem;
+    font-weight: 600;
+    transition: .15s;
+  }
+  .lang-toggle button.active {
+    background: #fff;
+    color: var(--green);
+    border-color: #fff;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 780px;
+    margin: 32px auto;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ── Input card ── */
+  .input-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .input-card label {
+    display: block;
+    font-weight: 600;
+    font-size: .92rem;
+    color: var(--grey);
+    margin-bottom: 10px;
+  }
+  .input-row {
+    display: flex;
+    gap: 10px;
+  }
+  textarea {
+    flex: 1;
+    resize: vertical;
+    min-height: 72px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-family: inherit;
+    color: var(--text);
+    transition: border-color .15s;
+  }
+  textarea:focus { outline: none; border-color: var(--green); }
+  button.send {
+    align-self: flex-end;
+    padding: 12px 22px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: .95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, opacity .15s;
+    white-space: nowrap;
+  }
+  button.send:hover { background: #1b5e20; }
+  button.send:disabled { opacity: .55; cursor: not-allowed; }
+
+  /* ── Example pills ── */
+  .examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .examples span { font-size: .8rem; color: var(--grey); align-self: center; }
+  .pill {
+    padding: 5px 12px;
+    background: var(--green-light);
+    color: var(--green);
+    border-radius: 20px;
+    font-size: .8rem;
+    cursor: pointer;
+    border: 1px solid #c8e6c9;
+    transition: .12s;
+  }
+  .pill:hover { background: #c8e6c9; }
+
+  /* ── Spinner ── */
+  .spinner-wrap {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 24px;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    color: var(--grey);
+    font-size: .9rem;
+  }
+  .spinner-wrap.visible { display: flex; }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 3px solid var(--border);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Answer card ── */
+  .answer-card {
+    display: none;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .answer-card.visible { display: block; }
+
+  .risk-banner {
+    padding: 14px 20px;
+    font-weight: 700;
+    font-size: .95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .risk-banner.normal    { background: var(--green-light); color: var(--green); }
+  .risk-banner.watch     { background: var(--amber-light); color: var(--amber); }
+  .risk-banner.warning   { background: #fff3e0;            color: #e65100; }
+  .risk-banner.emergency { background: var(--red-light);   color: var(--red); }
+
+  .answer-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+
+  .answer-text { font-size: 1rem; line-height: 1.65; }
+
+  .steps-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .steps-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: .93rem;
+    line-height: 1.5;
+  }
+  .step-num {
+    min-width: 24px; height: 24px;
+    background: var(--green);
+    color: #fff;
+    border-radius: 50%;
+    font-size: .75rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .info-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .info-box {
+    flex: 1;
+    min-width: 180px;
+    padding: 12px 14px;
+    background: var(--blue-light);
+    border-radius: 8px;
+    font-size: .85rem;
+    line-height: 1.5;
+  }
+  .info-box .label { font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+
+  .escalation-box {
+    padding: 12px 16px;
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    font-size: .88rem;
+    line-height: 1.55;
+    color: #4a0000;
+  }
+  .escalation-box .label { font-weight: 700; color: var(--red); margin-bottom: 4px; }
+
+  .citations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: .78rem;
+  }
+  .citations .clabel { color: var(--grey); }
+  .cite-tag {
+    padding: 3px 8px;
+    background: var(--green-light);
+    color: var(--green);
+    border-radius: 4px;
+    font-family: monospace;
+  }
+
+  .meta { font-size: .76rem; color: #90a4ae; text-align: right; }
+
+  /* ── Error card ── */
+  .error-card {
+    display: none;
+    padding: 18px 20px;
+    background: var(--red-light);
+    border-radius: var(--radius);
+    color: var(--red);
+    font-size: .9rem;
+    box-shadow: var(--shadow);
+  }
+  .error-card.visible { display: block; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: .78rem;
+    color: #90a4ae;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .input-row { flex-direction: column; }
+    button.send { width: 100%; }
+    .info-row { flex-direction: column; }
+    header { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🌾</div>
+  <div>
+    <h1 id="h-title">VazhaVanam</h1>
+    <p id="h-sub">Climate Resilience Advisor for Tamil Nadu Farmers</p>
+  </div>
+  <div class="lang-toggle">
+    <button id="btn-en" class="active" onclick="setLang('en')">English</button>
+    <button id="btn-ta" onclick="setLang('ta')">தமிழ்</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Input card -->
+  <div class="input-card">
+    <label id="lbl-q">Ask a question about your farm or the weather</label>
+    <div class="input-row">
+      <textarea id="question" rows="3" id="q-input"
+        placeholder="e.g. Cyclone warning tomorrow, my paddy is 85 days old. What should I do?">
+      </textarea>
+      <button class="send" id="send-btn" onclick="ask()">
+        <span id="btn-text">Ask →</span>
+      </button>
+    </div>
+    <div class="examples" id="examples-en">
+      <span>Try:</span>
+      <div class="pill" onclick="fillQ(this)">Cyclone watch, paddy 85 days</div>
+      <div class="pill" onclick="fillQ(this)">Severe drought, reservoir at 10%</div>
+      <div class="pill" onclick="fillQ(this)">Heavy rain forecast, paddy 35 days</div>
+      <div class="pill" onclick="fillQ(this)">Brown plant hopper, what pesticide?</div>
+      <div class="pill" onclick="fillQ(this)">Dam at 25%, should I irrigate now?</div>
+    </div>
+    <div class="examples" id="examples-ta" style="display:none">
+      <span>முயற்சி:</span>
+      <div class="pill" onclick="fillQ(this)">நாளை புயல் வரும், நெல் 85 நாள்</div>
+      <div class="pill" onclick="fillQ(this)">கடும் வறட்சி, அணை 10%</div>
+      <div class="pill" onclick="fillQ(this)">நாளை கனமழை, நெல் 40 நாள்</div>
+      <div class="pill" onclick="fillQ(this)">நெல்லில் பூஞ்சை நோய், என்ன மருந்து?</div>
+      <div class="pill" onclick="fillQ(this)">அணைக்கட்டு 20%, பாசனம் செய்யலாமா?</div>
+    </div>
+  </div>
+
+  <!-- Spinner -->
+  <div class="spinner-wrap" id="spinner">
+    <div class="spinner"></div>
+    <span id="spinner-txt">Getting your advisory…</span>
+  </div>
+
+  <!-- Error -->
+  <div class="error-card" id="error-card">
+    <strong>⚠ Error:</strong> <span id="error-msg"></span>
+  </div>
+
+  <!-- Answer -->
+  <div class="answer-card" id="answer-card">
+    <div class="risk-banner" id="risk-banner"></div>
+    <div class="answer-body">
+      <div class="answer-text" id="answer-text"></div>
+      <ul class="steps-list" id="steps-list"></ul>
+      <div class="info-row" id="info-row"></div>
+      <div class="escalation-box" id="esc-box" style="display:none">
+        <div class="label" id="lbl-esc">⚠ For help</div>
+        <div id="esc-text"></div>
+      </div>
+      <div class="citations" id="citations"></div>
+      <div class="meta" id="meta-line"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>VazhaVanam · Amazon Bedrock Nova 2 Lite · Apache-2.0</footer>
+
+<script>
+  let lang = 'en';
+
+  const i18n = {
+    en: {
+      title: 'VazhaVanam',
+      sub: 'Climate Resilience Advisor for Tamil Nadu Farmers',
+      q: 'Ask a question about your farm or the weather',
+      btn: 'Ask →',
+      loading: 'Getting your advisory…',
+      esc: '⚠ For help',
+      citations: 'Sources:',
+      risk: { normal:'✅ Normal', watch:'👁 Watch', warning:'⚠ Warning', emergency:'🚨 EMERGENCY' },
+    },
+    ta: {
+      title: 'வாழ வாணம்',
+      sub: 'தமிழ்நாடு விவசாயிகளுக்கு காலநிலை ஆலோசனை',
+      q: 'உங்கள் வயல் அல்லது வானிலை பற்றி கேட்கவும்',
+      btn: 'கேள் →',
+      loading: 'ஆலோசனை தயாரிக்கப்படுகிறது…',
+      esc: '⚠ உதவிக்கு',
+      citations: 'ஆதாரங்கள்:',
+      risk: { normal:'✅ சாதாரண', watch:'👁 கவனிக்கவும்', warning:'⚠ எச்சரிக்கை', emergency:'🚨 அவசர நிலை' },
+    }
+  };
+
+  function setLang(l) {
+    lang = l;
+    const t = i18n[l];
+    document.getElementById('h-title').textContent = t.title;
+    document.getElementById('h-sub').textContent = t.sub;
+    document.getElementById('lbl-q').textContent = t.q;
+    document.getElementById('btn-text').textContent = t.btn;
+    document.getElementById('spinner-txt').textContent = t.loading;
+    document.getElementById('btn-en').classList.toggle('active', l==='en');
+    document.getElementById('btn-ta').classList.toggle('active', l==='ta');
+    document.getElementById('examples-en').style.display = l==='en' ? '' : 'none';
+    document.getElementById('examples-ta').style.display = l==='ta' ? '' : 'none';
+    document.getElementById('question').placeholder = l==='en'
+      ? 'e.g. Cyclone warning tomorrow, my paddy is 85 days old. What should I do?'
+      : 'எ.கா. நாளை புயல் வரும், என் நெல் 85 நாள் ஆகிறது, என்ன செய்வது?';
+    document.title = t.title + ' — Climate Advisor';
+  }
+
+  function fillQ(el) {
+    document.getElementById('question').value = el.textContent.trim();
+  }
+
+  function show(id, visible) {
+    document.getElementById(id).classList.toggle('visible', visible);
+  }
+
+  async function ask() {
+    const q = document.getElementById('question').value.trim();
+    if (!q) return;
+
+    document.getElementById('send-btn').disabled = true;
+    show('spinner', true);
+    show('answer-card', false);
+    show('error-card', false);
+
+    try {
+      const res = await fetch('/ask', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ text: q, lang })
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        document.getElementById('error-msg').textContent = data.error;
+        show('error-card', true);
+      } else {
+        render(data);
+        show('answer-card', true);
+      }
+    } catch(e) {
+      document.getElementById('error-msg').textContent = e.message;
+      show('error-card', true);
+    } finally {
+      show('spinner', false);
+      document.getElementById('send-btn').disabled = false;
+    }
+  }
+
+  function render(data) {
+    const plan = data.plan;
+    const meta = data.meta || {};
+    const t = i18n[lang];
+    const rl = (plan.risk_level || 'normal').toLowerCase();
+
+    // Risk banner
+    const banner = document.getElementById('risk-banner');
+    banner.className = 'risk-banner ' + rl;
+    banner.textContent = t.risk[rl] || rl.toUpperCase();
+
+    // Main answer
+    document.getElementById('answer-text').textContent = plan.answer || '';
+
+    // Steps
+    const ul = document.getElementById('steps-list');
+    ul.innerHTML = '';
+    (plan.steps || []).forEach((s, i) => {
+      ul.innerHTML += `<li><span class="step-num">${i+1}</span><span>${s}</span></li>`;
+    });
+
+    // Water / crop info boxes
+    const infoRow = document.getElementById('info-row');
+    infoRow.innerHTML = '';
+    if (plan.water_action) {
+      infoRow.innerHTML += `<div class="info-box"><div class="label">💧 Water</div>${plan.water_action}</div>`;
+    }
+    if (plan.crop_action) {
+      infoRow.innerHTML += `<div class="info-box"><div class="label">🌾 Crop</div>${plan.crop_action}</div>`;
+    }
+
+    // Escalation
+    const escBox = document.getElementById('esc-box');
+    const escText = plan.escalation || '';
+    if (escText) {
+      document.getElementById('lbl-esc').textContent = t.esc;
+      document.getElementById('esc-text').textContent = escText;
+      escBox.style.display = '';
+    } else {
+      escBox.style.display = 'none';
+    }
+
+    // Citations
+    const cites = document.getElementById('citations');
+    const ids = plan.citations || [];
+    if (ids.length) {
+      cites.innerHTML = `<span class="clabel">${t.citations}</span>` +
+        ids.map(id => `<span class="cite-tag">${id}</span>`).join('');
+    } else {
+      cites.innerHTML = '';
+    }
+
+    // Meta
+    const path = meta.path || '';
+    const ms = meta.latency_ms || 0;
+    const lang_label = meta.lang || lang;
+    document.getElementById('meta-line').textContent =
+      `${path} · ${lang_label} · ${ms} ms`;
+  }
+
+  // Allow Enter (without Shift) to submit
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('question').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
+    });
+  });
+</script>
+
+</body>
+</html>

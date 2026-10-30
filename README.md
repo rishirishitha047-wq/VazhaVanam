@@ -120,6 +120,37 @@ export VAZHAVANAM_SESSIONS=~/.vazhavanam-sessions
 
 ---
 
+## Web UI
+
+VazhaVanam includes a responsive web interface with Tamil/English language toggle.
+
+```bash
+# Start the web server
+python -m ui.server
+# Opens on http://localhost:8000
+
+# Custom p0rt
+python -m ui.server --port 3000
+```
+
+Features:
+- Tamil/English language toggle (top right)
+- Example question pills (one-click fill)
+- Risk level banner (colour-coded: green/amber/orange/red)
+- Action steps with numbered list
+- Water and crop info boxes
+- Escalation helpline display
+- Source citations
+- Latency and path metadata
+
+### API endpoint
+
+```bash
+curl -X POST http://localhost:8000/ask -H "Content-Type: application/json" -d '{`"text`": `"cyclone warning, paddy 85 days old`", `"lang`": `"en`"}'
+```
+
+---
+
 ## Running tests and measurement
 
 ```bash

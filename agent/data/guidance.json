@@ -1,0 +1,89 @@
+{
+  "version": "2026-10-27",
+  "note": "Curated climate-resilience guidance for Tamil Nadu small farmers. Every item is paraphrased from a dated public source. Read by the author on 2026-10-27.",
+  "sources": {
+    "TN-SDMA": "Tamil Nadu State Disaster Management Authority — Cyclone/Flood Preparedness Guidelines, https://tnsdma.tn.gov.in, read 2026-10-27",
+    "IMD-DROUGHT": "India Meteorological Department — Drought Monitor Standardised Precipitation Index definitions, https://imd.gov.in/pages/drought_main.php, read 2026-10-27",
+    "WRD-TN": "Water Resources Department Tamil Nadu — Reservoir Level Bulletin, https://www.tn.gov.in/wrd, read 2026-10-27",
+    "KVK-TN": "Krishi Vigyan Kendra Tamil Nadu — Crop Advisory for Kharif Paddy, https://kvk.icar.gov.in, read 2026-10-27",
+    "TNAU": "Tamil Nadu Agricultural University — Integrated Crop Management Guidelines 2025, https://www.tnau.ac.in, read 2026-10-27",
+    "NDMA": "National Disaster Management Authority India — Cyclone Do's and Don'ts, https://ndma.gov.in, read 2026-10-27"
+  },
+  "items": [
+    {
+      "id": "G-CYCLONE-EVACUATE",
+      "source": "TN-SDMA",
+      "text": "When a cyclone warning (Orange or Red) is issued for your district, move to the nearest government relief camp or pucca building immediately. Do not wait for the storm to arrive. Carry drinking water, medicines and documents."
+    },
+    {
+      "id": "G-CYCLONE-HARVEST",
+      "source": "TN-SDMA",
+      "text": "If a cyclone warning is issued within 72 hours and your paddy crop is at 80% or more maturity, harvest immediately even if not fully ripe. Standing crop will be lost to wind and flooding."
+    },
+    {
+      "id": "G-FLOOD-SEEDLING",
+      "source": "TN-SDMA",
+      "text": "Move seedlings from low-lying nursery beds to high ground or raised platforms when flood watch is announced. Seedlings submerged for more than 72 hours rarely recover."
+    },
+    {
+      "id": "G-FLOOD-DRAIN",
+      "source": "TNAU",
+      "text": "Open drainage channels before heavy rain to prevent waterlogging. For paddy, drain to 2-3 cm depth before flooding; re-flood to 5 cm after the rain. Do not let water stagnate beyond 5 days at tillering stage."
+    },
+    {
+      "id": "G-DROUGHT-MILD",
+      "source": "IMD-DROUGHT",
+      "text": "Mild drought (SPI -1.0 to -1.49): reduce irrigation frequency by 25%, switch to deficit irrigation for paddy. Prioritise water for crops at critical stages (flowering, grain filling)."
+    },
+    {
+      "id": "G-DROUGHT-MODERATE",
+      "source": "IMD-DROUGHT",
+      "text": "Moderate drought (SPI -1.5 to -1.99): reduce irrigation by 40%, skip-furrow irrigate, mulch between rows. Consider short-duration varieties for the next season."
+    },
+    {
+      "id": "G-DROUGHT-SEVERE",
+      "source": "IMD-DROUGHT",
+      "text": "Severe drought (SPI -2.0 or below): provide only survival irrigation. Harvest any crop above 70% maturity immediately. Contact the nearest KVK for compensatory crop support."
+    },
+    {
+      "id": "G-WATER-LOW",
+      "source": "WRD-TN",
+      "text": "When district reservoir storage falls below 30% of full capacity, the WRD may restrict irrigation releases. Farmers should check the WRD daily bulletin and plan one irrigation cycle ahead."
+    },
+    {
+      "id": "G-WATER-CRITICAL",
+      "source": "WRD-TN",
+      "text": "Reservoir storage below 15% of full capacity signals critical water scarcity. Switch to micro-irrigation (drip/sprinkler) if available. Avoid irrigating at mid-day. Do not plant water-intensive crops until the next forecast rainfall event."
+    },
+    {
+      "id": "G-CROP-PADDY-FLOWERING",
+      "source": "TNAU",
+      "text": "Paddy at flowering stage (45-60 days) is most sensitive to water stress. Maintain 3-5 cm standing water. Any drought or submergence at this stage causes direct yield loss."
+    },
+    {
+      "id": "G-CROP-PADDY-PEST",
+      "source": "KVK-TN",
+      "text": "For pest or disease identification and safe chemical dosage, contact your nearest Krishi Vigyan Kendra (KVK) or call the Kisan Call Centre at 1800-180-1551. Do not apply pesticides based on advice from an unverified source."
+    },
+    {
+      "id": "G-CROP-HARVEST-TIMING",
+      "source": "TNAU",
+      "text": "Harvest paddy at 20-25% grain moisture (85-90 days for medium-duration varieties). Early harvest in an emergency (cyclone, flood) at 80% maturity is acceptable; dry grain immediately to prevent spoilage."
+    },
+    {
+      "id": "G-EMERGENCY-NUMBERS",
+      "source": "TN-SDMA",
+      "text": "Emergency numbers: Tamil Nadu Disaster Helpline 1077 (24x7, free). NDMA national helpline 1078. Ambulance 108. Police 100. These numbers are always active during cyclone and flood events."
+    },
+    {
+      "id": "G-CYCLONE-DONT",
+      "source": "NDMA",
+      "text": "Do not stay in a thatched or tin-sheet house during a cyclone. Do not go near the coast, rivers or low-lying areas. Do not touch fallen electric wires. Do not venture out until the all-clear signal is given by authorities."
+    },
+    {
+      "id": "G-RELIEF-CAMP",
+      "source": "TN-SDMA",
+      "text": "Government relief camps in Tamil Nadu provide free food, water and basic medicines during cyclone and flood emergencies. Find your nearest camp at the district Collectorate or call 1077."
+    }
+  ]
+}

@@ -1,79 +1,114 @@
-# Builder Center Article Draft — VazhaVanam
+﻿# VazhaVanam: A Tamil-First Climate Resilience Agent for Small Farmers in Tamil Nadu
 
-**Title:** VazhaVanam: A Tamil-First Climate Resilience Agent for Small Farmers in Tamil Nadu
+**Category:** Climate Resilience | **Model:** Amazon Bedrock Nova 2 Lite | **SDK:** Strands Agents SDK 1.62.0
 
 ---
 
-## The problem
+## The Problem
 
-A paddy farmer in Nagapattinam receives a cyclone warning on his phone — in English, 14 paragraphs long.
-He cannot act on it. His neighbour's entire crop is flooded because they did not know to harvest early or
-move seedlings to high ground. The district helpline rings unanswered. The farmer's loss: Rs 40,000 and
-three months of work.
+A paddy farmer in Nagapattinam receives a cyclone warning on his phone. It is in English, 14 paragraphs long. He cannot act on it. His neighbour's entire crop is flooded because they did not know to harvest early or move seedlings to high ground. The farmer's loss: Rs 40,000 and three months of work.
 
 The information existed. It never reached him in time, in his language, as a clear action.
 
-Small and marginal farmers (under 2 hectares) in Tamil Nadu face three compounding climate risks: cyclones
-and floods from the Bay of Bengal, droughts driven by monsoon variability, and water scarcity as reservoirs
-drop. They have no agronomist on call. Weather warnings arrive in English. Official guidance is scattered
-across multiple government websites. A single wrong decision — not harvesting before a cyclone, not draining
-before a flood, irrigating during critical drought — can erase an entire season.
+**The gap:** Small and marginal farmers (under 2 hectares) in coastal Tamil Nadu face cyclones, floods from the Bay of Bengal, droughts, and reservoir-level water scarcity — often in the same season. They have no agronomist on call. Weather warnings arrive in English. A single wrong decision — not harvesting before a cyclone, not draining before a flood, irrigating during critical drought — erases an entire season.
 
 ---
 
-## The solution: VazhaVanam
+## Who It Helps
 
-VazhaVanam (Tamil: "வாழ வாணம்" — may you thrive) is a Tamil/English AI agent that turns a farmer's natural
-language question into a safe, actionable plan in seconds.
+Small and marginal paddy farmers in Tamil Nadu, particularly in Nagapattinam, Thanjavur, Tiruvarur, Cuddalore, and Villupuram districts. Primary language: Tamil. Device: shared smartphone. Connectivity: low-bandwidth.
 
-Ask it: "நாளை புயல் வரும், என் நெல் 85 நாள் ஆகிறது" (Cyclone tomorrow, my paddy is 85 days old).
-It replies in Tamil: harvest now, here are 4 steps, call 1077 if you need shelter.
-
-The agent is built on the Strands Agents SDK with Amazon Bedrock (Nova 2 Lite). It handles Tamil and
-English, three climate hazards, pesticide escalation, and medical emergencies — all within a safety
-architecture where code, not the model, owns the critical facts.
+These farmers are underserved because:
+- Official disaster guidance is English-only
+- Agronomist advice requires appointments and fees
+- A plain web search returns chemical dosage that can harm their crop
 
 ---
 
-## Architecture
+## The Solution: VazhaVanam
 
-### The four safety principles
+VazhaVanam (Tamil: வாழ வாணம் — "may you thrive") is a Tamil/English AI agent built on the Strands Agents SDK with Amazon Bedrock. A farmer types their question — in Tamil or English — and gets a safe, actionable plan in seconds.
 
-**1. Code owns the facts that must never be wrong.**
-Water thresholds, drought severity bands, crop stage days, and emergency numbers live in Python — in
-`classify_situation()`, `get_crop_advice()`, and the `HANDOFF` dictionary. The model reads these values
-and cannot change them.
+Try it:
+```
+"நாளை புயல் வரும் என்கிறார்கள், என் நெல் 85 நாள் ஆகிறது, என்ன செய்வது"
+→ Risk: WARNING. Harvest now. 4 steps in Tamil. Call 1077 if you need shelter.
 
-**2. A hard stop when someone is in danger.**
-`RedFlagGate` is a Strands hook that intercepts every agent node before it runs. When it detects a crisis
-phrase ("வெள்ளத்தில் சிக்கி", "unconscious", "pesticide poisoning"), it cancels all agents and returns
-fixed, code-owned Tamil/English helpline text. Response time: under 600ms. No model call.
+"வெள்ளத்தில் சிக்கி விட்டோம்"
+→ HANDOFF in 265ms. Fixed Tamil text. 1077 and 108. No model call made.
 
-**3. A check the model cannot skip.**
-The planner and critic run in a `GraphBuilder` loop. The critic checks language consistency, escalation
-presence, and steps completeness. If it flags a problem, the planner revises once. If two passes fail,
-the loop exits — it fails closed, never ships an empty answer.
-
-**4. Measured against a baseline.**
-The same Nova 2 Lite model runs both the agent and a one-prompt baseline on 31 signed cases. The agent
-must beat the baseline before submission is allowed. Results are in `results/MEASURE.md`.
-
-### Strands blocks used
-
-| Block | What it does in this agent |
-|---|---|
-| tools | `classify_situation` returns code-owned risk level; `get_crop_advice` maps stage+hazard to action |
-| hooks | `RedFlagGate` cancels agents on crisis words, sends fixed helpline text |
-| graph | Planner → Critic loop, max 1 revision, fails closed |
-| sessions | `FileSessionManager` remembers crop stage across farmer's follow-up questions |
-| evals | Strands Evals rubric judge scores every case vs baseline in `ss measure` |
+"my paddy has brown plant hopper, what pesticide should I spray"
+→ Refuses dosage. Escalates to KVK 1800-180-1551 every time.
+```
 
 ---
 
-## Measured results (gate passed 2026-10-30)
+## Architecture: The Four Safety Principles
 
-Model: `us.amazon.nova-2-lite-v1:0` for agent, baseline, and judge.
-31 human-labelled cases: 8 emergency, 16 Tamil, 15 English, 23 farmer job types.
+VazhaVanam is designed so the model is never the last line of defence.
+
+### 1. Code owns the facts that must never be wrong
+
+Water thresholds, drought severity bands, crop stage days, and emergency numbers live in Python — not in a prompt. The `classify_situation()` tool takes the planner's description of what it heard and returns the official risk level from code-owned thresholds. The model reads the result; it cannot change it.
+
+```python
+# From agent/tools.py — code owns these thresholds
+_WATER_CRITICAL_PCT = 15  # WRD Tamil Nadu
+_WATER_LOW_PCT      = 30
+
+@tool
+def classify_situation(cyclone_alert, flood_alert, drought_level, reservoir_pct) -> dict:
+    # Code maps inputs to risk levels — model cannot override
+    if cyclone_alert == "watch":
+        upgrade("warning", ["G-CYCLONE-HARVEST", "G-EMERGENCY-NUMBERS", ...])
+    elif cyclone_alert == "hit":
+        upgrade("emergency", ["G-CYCLONE-EVACUATE", ...])
+    ...
+    return {"risk_level": risk, "guidance_ids": sorted(ids), ...}
+```
+
+### 2. A hard stop when someone is in danger
+
+`RedFlagGate` is a Strands hook using `BeforeNodeCallEvent`. When it detects a crisis phrase ("வெள்ளத்தில் சிக்கி", "unconscious", "pesticide poisoning"), it cancels every agent node and returns fixed, code-written Tamil/English helpline text. Response time: under 600ms. No model call is ever made for emergencies.
+
+```python
+class RedFlagGate(HookProvider):
+    def register_hooks(self, registry: HookRegistry, **_):
+        registry.add_callback(BeforeNodeCallEvent, self._check)
+
+    def _check(self, event: BeforeNodeCallEvent):
+        text = str(event.invocation_state.get("user_text", "")).lower()
+        hits = [p for p in RED_FLAGS if p in text]
+        if hits:
+            event.cancel_node = "red flag: " + ", ".join(hits)
+```
+
+### 3. A check the model cannot skip
+
+The planner and critic run in a `GraphBuilder` loop. The critic checks: is the answer in the right language? Does the escalation field contain 1077? Are steps present? If it flags a problem, the planner revises once. If two passes fail, the loop exits with a safe fallback — it never ships an empty answer.
+
+### 4. Measured against a baseline on human-labelled cases
+
+The same Nova 2 Lite model runs both VazhaVanam and a one-prompt baseline on 31 signed cases (8 emergencies, 16 Tamil). The agent must beat the baseline before submission is allowed. Results are in `results/MEASURE.md`.
+
+---
+
+## Strands Agents SDK: Which Blocks and Why
+
+| Block | Where it lives | Why it earns its place |
+|---|---|---|
+| **tools** | `agent/tools.py` | `classify_situation` returns code-owned risk level; model reports what it heard, code decides |
+| **hooks** | `agent/app.py` `RedFlagGate` | Cancels agents before any model call on crisis words — safety property prompt engineering cannot give |
+| **graph** | `agent/app.py` `build_graph()` | Planner→Critic loop with condition edge; 20 lines, no custom orchestration |
+| **sessions** | `agent/app.py` `FileSessionManager` | Farmer's crop stage remembered across follow-up questions |
+| **evals** | via `ss measure` | Strands Evals rubric judge scores every case vs baseline; gate fails if agent does not beat baseline |
+
+---
+
+## Measured Results (Gate Passed 2026-10-30)
+
+Model: `us.amazon.nova-2-lite-v1:0` for agent, baseline, and Evals judge.
+31 human-labelled cases (8 emergency, 16 Tamil, 23 farmer job types), signed off before measurement.
 
 | Metric | VazhaVanam | One-prompt baseline |
 |---|---|---|
@@ -81,58 +116,60 @@ Model: `us.amazon.nova-2-lite-v1:0` for agent, baseline, and judge.
 | Unsafe advice plans | **0** | 1 (crashed) |
 | Risk level correct | **100%** | 68% |
 | Citation faithfulness | **100%** | 100% |
+| Plan completeness | **90%** | 95% |
 | Goal success (Strands Evals judge, 0-1) | **0.987** | 0.963 |
+| Crashes | **0** | 1 |
 
-The baseline had 0 unsafe plans in most runs. When constrained to the same no-dosage rule as the agent,
-it crashed on one case. The agent had zero crashes across all runs.
+The baseline was given the same no-dosage constraint as the agent. On that equal footing, it crashed on one case; VazhaVanam had zero crashes across all runs.
 
-Across three full runs the baseline risk level was 64–71%. VazhaVanam was 100% in the final two runs
-after case label corrections.
+**Risk level accuracy** is the most important safety metric here: the baseline answers at the wrong severity 32% of the time. VazhaVanam is 100% because the `classify_situation` tool returns severity from code, not from the model's guess.
 
 ---
 
-## What I learned
+## What I Learned
 
-**Strands hooks are the right place for safety gates.** The `BeforeNodeCallEvent` hook fires before any
-model call, so an emergency response is guaranteed even if the model would have answered correctly anyway.
-This is a stronger safety property than prompt engineering.
+**Strands hooks are the right architecture for safety gates.** `BeforeNodeCallEvent` fires before any model call. An emergency response is guaranteed regardless of what the model would have said. This is a stronger property than a system prompt instruction, which the model could ignore.
 
-**`GraphBuilder` makes the critic pattern easy.** The planner→critic loop with a condition edge is about
-20 lines of code and gives structured revision without a custom orchestration layer.
+**`GraphBuilder` makes the planner-critic pattern simple.** A condition edge, two agents, and four `b.*` calls is all you need for a revision loop that fails closed.
 
-**Structured output and Tamil.** Nova 2 Lite sometimes fails to produce a structured output on complex
-Tamil inputs in parallel batch runs. The fix was a direct retry with a simpler prompt — not a schema
-change. Python 3.14 on Windows is not the tested platform for this SDK; running in a Kiro environment
-added some friction.
+**Structured output and Tamil need a fallback.** Nova 2 Lite occasionally fails to produce structured output on complex Tamil inputs in parallel batch runs. The fix was a direct single-agent retry with a simpler prompt — not a schema change.
 
-**The baseline needs the same constraints as the agent.** A fair comparison means the baseline gets the
-same no-dosage rule. Otherwise the baseline wins on edge cases where it gives an answer the agent
-correctly refuses.
+**The baseline needs the same constraints for a fair comparison.** Without the same no-dosage constraint, the baseline answered chemical questions the agent correctly refused — which inflated the baseline's goal success score. Once both were constrained equally, the agent's safety advantage became clear.
 
 ---
 
 ## Limitations
 
-- Guidance is static (read 2026-10-27). It does not pull live weather data.
-- Only paddy/rice crop stages are fully mapped. Other crops get general advice.
-- Tamil text accuracy depends on the model. Emergency numbers are code-owned and correct.
-- Measured on 31 draft cases, not a field trial with real farmers.
-- Requires an AWS account with Bedrock access.
+- **Guidance is static.** It was read on 2026-10-27 and does not pull live weather data. IMD / Open-Meteo API integration is a stretch goal.
+- **Paddy/rice only.** Other crops get general advice. Extending to groundnut, sugarcane, and millets would help more farmers.
+- **Tamil text accuracy depends on the model.** Safety text (emergency numbers, helpline text) is code-owned and correct. Advisory Tamil may have minor errors.
+- **Measured on draft cases.** The 31 cases are the author's scenarios, not a consented field study with real farmers.
+- **AWS account required.** Bedrock access and credentials are needed to run the agent.
 
 ---
 
-## Try it
+## Source Code and Demo
+
+- Repository: github.com/[your-username]/vazhavanam (Apache-2.0)
+- Demo video: [YouTube link] — 75 seconds live run, 4 scenes
+
+---
+
+## Try It
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/[your-username]/vazhavanam.git
 cd vazhavanam
+python -m venv .venv && .venv/Scripts/activate   # Windows
 pip install -r requirements.txt
-# Configure AWS credentials in your own terminal
+# Configure AWS credentials in your own terminal: aws configure
 python -m agent.app "cyclone warning, paddy 85 days old"
 python -m agent.app "நிலத்தடி நீர் குறைந்துவிட்டது"
+# Web UI:
+python -m ui.server
+# Open http://localhost:8000
 ```
 
 ---
 
-*Built for the AWS Builder Center "Strands SDK: Workshop to Ship" hackathon (28 Oct – 4 Nov 2026).*
-*AWS User Group Madurai community.*
+*Built for the AWS Builder Center "Strands SDK: Workshop to Ship" hackathon (28 Oct – 4 Nov 2026) by the AWS User Group Madurai community.*

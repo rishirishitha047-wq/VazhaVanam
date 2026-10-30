@@ -1,0 +1,145 @@
+{
+  "spec": {
+    "title": "VazhaVanam",
+    "subtitle": "Tamil-first climate resilience advisor for small farmers in Tamil Nadu",
+    "tags": [
+      "#strands-agents",
+      "#social-good",
+      "#climate-resilience"
+    ],
+    "closing": "VazhaVanam — safety-first, Tamil-first climate guidance for the farmers who need it most.",
+    "intro_s": 4,
+    "measured_s": 8,
+    "scenes": [
+      {
+        "title": "Cyclone watch in Tamil",
+        "caption": "A farmer asks about an approaching cyclone in Tamil. The agent answers in Tamil with action steps.",
+        "input": "நாளை புயல் வரும் என்கிறார்கள், என் நெல் 85 நாள் ஆகிறது, என்ன செய்வது",
+        "command": "python -m agent.app \"நாளை புயல் வரும் என்கிறார்கள், என் நெல் 85 நாள் ஆகிறது, என்ன செய்வது\"",
+        "hold_s": 5
+      },
+      {
+        "title": "Emergency: flood victim trapped",
+        "caption": "The safety hook fires instantly — no model call. Fixed Tamil helpline text is sent.",
+        "input": "வெள்ளத்தில் சிக்கி விட்டோம், வயல் முழுவதும் மூழ்கிவிட்டது",
+        "command": "python -m agent.app \"வெள்ளத்தில் சிக்கி விட்டோம், வயல் முழுவதும் மூழ்கிவிட்டது\"",
+        "hold_s": 4
+      },
+      {
+        "title": "Drought advisory in English",
+        "caption": "Severe drought with reservoir at 10%. The agent says: do not plant new paddy.",
+        "input": "severe drought, reservoir at 10 percent, should I still plant paddy",
+        "command": "python -m agent.app \"severe drought, reservoir at 10 percent, should I still plant paddy\"",
+        "hold_s": 5
+      },
+      {
+        "title": "Pesticide question — safe escalation",
+        "caption": "The agent refuses to give chemical dosage and escalates to KVK every time.",
+        "input": "my paddy has brown plant hopper, what pesticide should I spray",
+        "command": "python -m agent.app \"my paddy has brown plant hopper, what pesticide should I spray\"",
+        "hold_s": 4
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "title": "Cyclone watch in Tamil",
+      "command": "python -m agent.app \"நாளை புயல் வரும் என்கிறார்கள், என் நெல் 85 நாள் ஆகிறது, என்ன செய்வது\"",
+      "exit": 0,
+      "evidence": [
+        "[critic] pass 1: PASS",
+        "[plan] agent | lang=ta | 9579 ms"
+      ],
+      "output": [
+        "[critic] pass 1: PASS",
+        "[plan] agent | lang=ta | 9579 ms",
+        "",
+        "Risk level: WARNING",
+        "",
+        "நாளை புயல் வரும் என்பதால் உங்கள் நெல் 85 நாள் ஆகியதால் உடனடியாக அறுவடை செய்யவும். புயல் வந்தால் நெல் முற்றிலும் பாதிக்கப்படும். புயல் எச்சரிக்கை இருப்பால் அருகிலுள்ள அரசு நிவாரண முகாமுக்கு அல்லது புகழ்பெற்ற கட்டிடத்திற்கு நகர்த்தவும்.",
+        "",
+        "Steps:",
+        "  1. உடனடியாக நெல் அறுவடை செய்யவும்",
+        "  2. புயல் எச்சரிக்கை இருப்பால் அருகிலுள்ள அரசு நிவாரண முகாமுக்கு நகர்த்தவும்",
+        "  3. நீர் பாதிப்பு ஏற்படாமல் இருக்க வழி செய்யவும்",
+        "  4. மருந்து மற்றும் ஆவணங்களை பாதுகாப்பாக வைத்திருக்கவும்",
+        "",
+        "For help: எமர்ஜென்சி நிலையில் உதவிக்கு 1077 கூறவும். கூடுதல் ஆலோசனைக்கு KVK-க்கு தொடர்பு கொள்ளவும்"
+      ]
+    },
+    {
+      "title": "Emergency: flood victim trapped",
+      "command": "python -m agent.app \"வெள்ளத்தில் சிக்கி விட்டோம், வயல் முழுவதும் மூழ்கிவிட்டது\"",
+      "exit": 0,
+      "evidence": [
+        "[safety] RED FLAG (வெள்ளத்தில் சிக்கி) -> HANDOFF, agents cancelled",
+        "[plan] handoff | lang=ta | 265 ms"
+      ],
+      "output": [
+        "[safety] RED FLAG (வெள்ளத்தில் சிக்கி) -> HANDOFF, agents cancelled",
+        "[plan] handoff | lang=ta | 265 ms",
+        "",
+        "Risk level: EMERGENCY",
+        "",
+        "இது அவசர நிலை. உடனே 1077 (தமிழ்நாடு பேரிடர் உதவி எண், இலவசம், 24x7) அல்லது 108 (ஆம்புலன்ஸ்) அழைக்கவும். அரசு நிவாரண முகாமிற்கு சென்று விடுங்கள். பூச்சிக்கொல்லி அவசரத்திற்கு 1800-180-1551 (KVK). இந்த உதவியாளர் அவசர நிலைக்கு பதில் சொல்லாது -- இப்போதே உதவி எண்ணை அழைக்கவும்.",
+        "",
+        "For help: இது அவசர நிலை. உடனே 1077 (தமிழ்நாடு பேரிடர் உதவி எண், இலவசம், 24x7) அல்லது 108 (ஆம்புலன்ஸ்) அழைக்கவும். அரசு நிவாரண முகாமிற்கு சென்று விடுங்கள். பூச்சிக்கொல்லி அவசரத்திற்கு 1800-180-1551 (KVK). இந்த உதவியாளர் அவசர நிலைக்கு பதில் சொல்லாது -- இப்போதே உதவி எண்ணை அழைக்கவும்."
+      ]
+    },
+    {
+      "title": "Drought advisory in English",
+      "command": "python -m agent.app \"severe drought, reservoir at 10 percent, should I still plant paddy\"",
+      "exit": 0,
+      "evidence": [
+        "[critic] pass 1: PASS",
+        "[plan] agent | lang=en | 13837 ms"
+      ],
+      "output": [
+        "[critic] pass 1: PASS",
+        "[plan] agent | lang=en | 13837 ms",
+        "",
+        "Risk level: WARNING",
+        "",
+        "Severe drought with reservoir at 10% means you should not plant new paddy now. The water is too scarce to support paddy, which needs constant moisture. If you already have seedlings, give them only survival irrigation and harvest any part that is 70% mature. Contact your nearest KVK for help with alternative crops that need less water.",
+        "",
+        "Steps:",
+        "  1. Do not plant new paddy until reservoir storage improves above 30% or rainfall forecast arrives",
+        "  2. If you have existing paddy seedlings, give them only survival irrigation (just enough to keep leaves green)",
+        "  3. Harvest any paddy that is already 70% mature to avoid total loss",
+        "  4. Contact KVK for alternative drought-tolerant crops like millets or short-duration maize",
+        "  5. Monitor daily reservoir updates from WRD and weather forecasts",
+        "",
+        "For help: Call KVK or 1800-180-1551 for emergency water management advice and alternative crop options. Also call 1077 for district-level drought relief programs."
+      ]
+    },
+    {
+      "title": "Pesticide question — safe escalation",
+      "command": "python -m agent.app \"my paddy has brown plant hopper, what pesticide should I spray\"",
+      "exit": 0,
+      "evidence": [
+        "[critic] pass 1: PASS",
+        "[plan] agent | lang=en | 5743 ms"
+      ],
+      "output": [
+        "[critic] pass 1: PASS",
+        "[plan] agent | lang=en | 5743 ms",
+        "",
+        "Risk level: NORMAL",
+        "",
+        "I understand you're concerned about brown plant hopper in your paddy field. For pest identification and safe pesticide application, you should contact your nearest Krishi Vigyan Kendra (KVK) or call the Kisan Call Centre at 1800-180-1551. They can provide you with the correct identification and safe chemical dosage for your specific situation. It is very important not to apply pesticides based on unverified sources, as this can harm your crop and the environment.",
+        "",
+        "Steps:",
+        "  1. Contact your nearest Krishi Vigyan Kendra (KVK) for pest identification",
+        "  2. Call the Kisan Call Centre at 1800-180-1551 for safe pesticide guidance",
+        "  3. Do not apply pesticides based on unverified sources",
+        "  4. Follow all instructions from agricultural experts",
+        "",
+        "For help: Contact your nearest KVK or call the Kisan Call Centre at 1800-180-1551 for pest identification and safe pesticide guidance. Also contact 1077 for any emergency assistance."
+      ]
+    }
+  ],
+  "started": "2026-10-30 14:45:23",
+  "seconds": 76.6,
+  "file": "results\\demo.webm",
+  "under_3_min": true
+}

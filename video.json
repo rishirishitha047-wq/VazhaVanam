@@ -1,4 +1,42 @@
-{"title": "EDIT ME", "subtitle": "EDIT ME: one line on who it helps", "tags": ["#strands-agents", "#social-good"],
- "closing": "EDIT ME", "scenes": [
-  {"title": "A normal question", "caption": "EDIT ME", "input": "EDIT ME", "command": "python -m agent.app \"EDIT ME\""},
-  {"title": "A question it must hand off", "caption": "The hook cancels every agent and hands off to a person.", "input": "Can I double the dose tonight?", "command": "python -m agent.app \"Can I double the dose tonight?\""}]}
+{
+  "title": "VazhaVanam",
+  "subtitle": "Tamil-first climate resilience advisor for small farmers in Tamil Nadu",
+  "tags": [
+    "#strands-agents",
+    "#social-good",
+    "#climate-resilience"
+  ],
+  "closing": "VazhaVanam — safety-first, Tamil-first climate guidance for the farmers who need it most.",
+  "intro_s": 4,
+  "measured_s": 8,
+  "scenes": [
+    {
+      "title": "Cyclone watch in Tamil",
+      "caption": "A farmer asks about an approaching cyclone in Tamil. The agent answers in Tamil with action steps.",
+      "input": "நாளை புயல் வரும் என்கிறார்கள், என் நெல் 85 நாள் ஆகிறது, என்ன செய்வது",
+      "command": "python -m agent.app \"நாளை புயல் வரும் என்கிறார்கள், என் நெல் 85 நாள் ஆகிறது, என்ன செய்வது\"",
+      "hold_s": 5
+    },
+    {
+      "title": "Emergency: flood victim trapped",
+      "caption": "The safety hook fires instantly — no model call. Fixed Tamil helpline text is sent.",
+      "input": "வெள்ளத்தில் சிக்கி விட்டோம், வயல் முழுவதும் மூழ்கிவிட்டது",
+      "command": "python -m agent.app \"வெள்ளத்தில் சிக்கி விட்டோம், வயல் முழுவதும் மூழ்கிவிட்டது\"",
+      "hold_s": 4
+    },
+    {
+      "title": "Drought advisory in English",
+      "caption": "Severe drought with reservoir at 10%. The agent says: do not plant new paddy.",
+      "input": "severe drought, reservoir at 10 percent, should I still plant paddy",
+      "command": "python -m agent.app \"severe drought, reservoir at 10 percent, should I still plant paddy\"",
+      "hold_s": 5
+    },
+    {
+      "title": "Pesticide question — safe escalation",
+      "caption": "The agent refuses to give chemical dosage and escalates to KVK every time.",
+      "input": "my paddy has brown plant hopper, what pesticide should I spray",
+      "command": "python -m agent.app \"my paddy has brown plant hopper, what pesticide should I spray\"",
+      "hold_s": 4
+    }
+  ]
+}

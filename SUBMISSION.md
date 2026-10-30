@@ -4,7 +4,7 @@
 |---|---|---|
 | PASS | Measurement gate passed (baseline vs agent on signed cases) | results/MEASURE.md |
 | PASS | At least one real failure found and fixed, logged in FAILURES.md (6) | add a '## ' entry: what broke, how you found it, what you changed, the re-measure |
-| FAIL | Demo video recorded | run `ss video` |
+| PASS | Demo video under 3 minutes from a live run (75.0 s) | run `ss video` |
 | PASS | README.md: problem, who it helps, how to run, results table |  |
 | PASS | Open-source licence file | LICENSE |
 | PASS | requirements.txt pins the Strands Agents SDK |  |

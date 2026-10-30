@@ -48,23 +48,23 @@
       "exit": 0,
       "evidence": [
         "[critic] pass 1: PASS",
-        "[plan] agent | lang=ta | 9579 ms"
+        "[plan] agent | lang=ta | 9585 ms"
       ],
       "output": [
         "[critic] pass 1: PASS",
-        "[plan] agent | lang=ta | 9579 ms",
+        "[plan] agent | lang=ta | 9585 ms",
         "",
         "Risk level: WARNING",
         "",
-        "நாளை புயல் வரும் என்பதால் உங்கள் நெல் 85 நாள் ஆகியதால் உடனடியாக அறுவடை செய்யவும். புயல் வந்தால் நெல் முற்றிலும் பாதிக்கப்படும். புயல் எச்சரிக்கை இருப்பால் அருகிலுள்ள அரசு நிவாரண முகாமுக்கு அல்லது புகழ்பெற்ற கட்டிடத்திற்கு நகர்த்தவும்.",
+        "நாளை புயல் வரும் என்பதால் உங்கள் நெல் 85 நாள் ஆகிய நிலையில் உள்ளது. புயல் விழுந்தால் நெல் முற்றிலும் அழிக்கப்படும். எனவே, புயல் எச்சரிக்கை வழங்கப்பட்டிருப்பதால் உங்கள் நெல்லை உடனே அறுவடை செய்ய வேண்டும். முழுமையாக வடர்ந்திராவிட்டாலும் அறுவடை செய்யவும்.",
         "",
         "Steps:",
         "  1. உடனடியாக நெல் அறுவடை செய்யவும்",
-        "  2. புயல் எச்சரிக்கை இருப்பால் அருகிலுள்ள அரசு நிவாரண முகாமுக்கு நகர்த்தவும்",
-        "  3. நீர் பாதிப்பு ஏற்படாமல் இருக்க வழி செய்யவும்",
-        "  4. மருந்து மற்றும் ஆவணங்களை பாதுகாப்பாக வைத்திருக்கவும்",
+        "  2. அறுவடை செய்த பிறகு தானியங்களை உலர வைக்கவும்",
+        "  3. புயல் வந்தால் பாதுகாப்பான இடத்திற்கு செல்லவும்",
+        "  4. 1077 க்கு தொடர்பு கொள்ளவும்",
         "",
-        "For help: எமர்ஜென்சி நிலையில் உதவிக்கு 1077 கூறவும். கூடுதல் ஆலோசனைக்கு KVK-க்கு தொடர்பு கொள்ளவும்"
+        "For help: எமர்ஜென்சி எச்சரிக்கைக்கு 1077 க்கு அழைக்கவும். நெல் அறுவடை குறித்து KVK உடன் தொடர்பு கொள்ளவும்"
       ]
     },
     {
@@ -73,11 +73,11 @@
       "exit": 0,
       "evidence": [
         "[safety] RED FLAG (வெள்ளத்தில் சிக்கி) -> HANDOFF, agents cancelled",
-        "[plan] handoff | lang=ta | 265 ms"
+        "[plan] handoff | lang=ta | 263 ms"
       ],
       "output": [
         "[safety] RED FLAG (வெள்ளத்தில் சிக்கி) -> HANDOFF, agents cancelled",
-        "[plan] handoff | lang=ta | 265 ms",
+        "[plan] handoff | lang=ta | 263 ms",
         "",
         "Risk level: EMERGENCY",
         "",
@@ -92,24 +92,24 @@
       "exit": 0,
       "evidence": [
         "[critic] pass 1: PASS",
-        "[plan] agent | lang=en | 13837 ms"
+        "[plan] agent | lang=en | 8166 ms"
       ],
       "output": [
         "[critic] pass 1: PASS",
-        "[plan] agent | lang=en | 13837 ms",
+        "[plan] agent | lang=en | 8166 ms",
         "",
         "Risk level: WARNING",
         "",
-        "Severe drought with reservoir at 10% means you should not plant new paddy now. The water is too scarce to support paddy, which needs constant moisture. If you already have seedlings, give them only survival irrigation and harvest any part that is 70% mature. Contact your nearest KVK for help with alternative crops that need less water.",
+        "Severe drought with reservoir at 10% makes planting paddy very risky. You should only plant if you have access to reliable irrigation water. If you already have seedlings, provide survival irrigation and harvest any mature portions immediately. Contact your nearest KVK for emergency crop support options.",
         "",
         "Steps:",
-        "  1. Do not plant new paddy until reservoir storage improves above 30% or rainfall forecast arrives",
-        "  2. If you have existing paddy seedlings, give them only survival irrigation (just enough to keep leaves green)",
-        "  3. Harvest any paddy that is already 70% mature to avoid total loss",
-        "  4. Contact KVK for alternative drought-tolerant crops like millets or short-duration maize",
-        "  5. Monitor daily reservoir updates from WRD and weather forecasts",
+        "  1. Check WRD daily bulletin for irrigation restrictions",
+        "  2. Provide survival irrigation to existing seedlings",
+        "  3. Harvest any crop above 70% maturity immediately",
+        "  4. Contact KVK for compensatory crop options",
+        "  5. Avoid planting new paddy until rainfall forecast improves",
         "",
-        "For help: Call KVK or 1800-180-1551 for emergency water management advice and alternative crop options. Also call 1077 for district-level drought relief programs."
+        "For help: Contact KVK immediately at 1800-180-1551 or visit your nearest KVK. Call 1077 for emergency assistance."
       ]
     },
     {
@@ -118,28 +118,28 @@
       "exit": 0,
       "evidence": [
         "[critic] pass 1: PASS",
-        "[plan] agent | lang=en | 5743 ms"
+        "[plan] agent | lang=en | 8637 ms"
       ],
       "output": [
         "[critic] pass 1: PASS",
-        "[plan] agent | lang=en | 5743 ms",
+        "[plan] agent | lang=en | 8637 ms",
         "",
         "Risk level: NORMAL",
         "",
-        "I understand you're concerned about brown plant hopper in your paddy field. For pest identification and safe pesticide application, you should contact your nearest Krishi Vigyan Kendra (KVK) or call the Kisan Call Centre at 1800-180-1551. They can provide you with the correct identification and safe chemical dosage for your specific situation. It is very important not to apply pesticides based on unverified sources, as this can harm your crop and the environment.",
+        "I understand you're concerned about brown plant hopper in your paddy field. For pest identification and safe pesticide application, you should contact your nearest Krishi Vigyan Kendra (KVK) or call the Kisan Call Centre at 1800-180-1551. They can provide you with the correct identification and recommended treatment for your specific situation. It is very important not to apply pesticides based on unverified sources as this could harm your crop and the environment.",
         "",
         "Steps:",
         "  1. Contact your nearest Krishi Vigyan Kendra (KVK) for pest identification",
         "  2. Call the Kisan Call Centre at 1800-180-1551 for safe pesticide guidance",
-        "  3. Do not apply pesticides based on unverified sources",
-        "  4. Follow all instructions from agricultural experts",
+        "  3. Do not apply any pesticides until you receive professional advice",
+        "  4. Follow all instructions from agricultural experts for application and safety",
         "",
-        "For help: Contact your nearest KVK or call the Kisan Call Centre at 1800-180-1551 for pest identification and safe pesticide guidance. Also contact 1077 for any emergency assistance."
+        "For help: Contact your nearest KVK or call Kisan Call Centre at 1800-180-1551 for pest identification and safe pesticide guidance. Always follow professional advice for pesticide application. 1077 is the emergency number for any immediate threats to life or property."
       ]
     }
   ],
-  "started": "2026-10-30 14:45:23",
-  "seconds": 76.6,
+  "started": "2026-10-30 14:47:34",
+  "seconds": 75.0,
   "file": "results\\demo.webm",
   "under_3_min": true
 }

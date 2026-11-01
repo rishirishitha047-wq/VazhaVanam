@@ -1,4 +1,4 @@
-﻿# VazhaVanam: A Tamil-First Climate Resilience Agent for Small Farmers in Tamil Nadu
+# VazhaVanam: A Tamil-First Climate Resilience Agent for Small Farmers in Tamil Nadu
 
 **Category:** Climate Resilience | **Model:** Amazon Bedrock Nova 2 Lite | **SDK:** Strands Agents SDK 1.62.0
 
@@ -150,15 +150,15 @@ The baseline was given the same no-dosage constraint as the agent. On that equal
 
 ## Source Code and Demo
 
-- Repository: github.com/[your-username]/vazhavanam (Apache-2.0)
-- Demo video: [YouTube link] — 75 seconds live run, 4 scenes
+- Repository: github.com/rishirishitha047-wq/VazhaVanam (Apache-2.0)
+- Demo video: results/demo_narrated.mp4 — 73 seconds live run with Amazon Polly voice narration, 4 scenes
 
 ---
 
 ## Try It
 
 ```bash
-git clone https://github.com/[your-username]/vazhavanam.git
+git clone https://github.com/rishirishitha047-wq/VazhaVanam.git
 cd vazhavanam
 python -m venv .venv && .venv/Scripts/activate   # Windows
 pip install -r requirements.txt
